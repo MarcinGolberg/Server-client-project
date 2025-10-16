@@ -1,9 +1,27 @@
-# Server–Client Project
+# Java Client-Server Chat Application
 
-A minimal Java server–client example with a plain‑text configuration file and two independent modules: a **server** and a **client**.
+A multi-client chat application developed in Java, featuring a server that manages connections and a client with a graphical user interface built using Java Swing. The server leverages modern Java features, including virtual threads, to handle multiple clients concurrently and efficiently.
 
-## Project layout
+---
 
+## Features
+
+* [cite_start]**Multi-Client Architecture**: The server can handle numerous client connections simultaneously using a virtual thread per client. [cite: 1]
+* **GUI Client**: An intuitive and user-friendly chat interface built with Java Swing.
+* [cite_start]**Dynamic Server Configuration**: The server's port, name, and a list of banned phrases are loaded from an external `server_config.txt` file. [cite: 1]
+* **Advanced Messaging Modes**:
+    * **Global**: Send messages to all users in the chat room.
+    * [cite_start]**Include**: Send private messages to a selected group of users. [cite: 1]
+    * [cite_start]**Exclude**: Broadcast a message to all users except for a selected few. [cite: 1]
+* [cite_start]**Content Moderation**: The server filters usernames and messages, rejecting any that contain predefined banned phrases. [cite: 1]
+* [cite_start]**Real-Time User List**: Clients receive and display a continuously updated list of all connected users. [cite: 1]
+* [cite_start]**On-Demand Information**: Clients can request and view the server's usage instructions and the list of banned words at any time. [cite: 1]
+
+---
+
+## Project Structure
+
+The project is organized into two main parts: the server-side application and the client-side application.
 ```
 Server-client-project/
 ├─ serverPart/
@@ -12,97 +30,87 @@ Server-client-project/
 └─ clientPart/
    └─ Client.java
 ```
+---
 
-## Prerequisites
+## Getting Started
 
-- Java 17+ (JDK). Any newer LTS should work.
-- A terminal (PowerShell / cmd on Windows, or any POSIX shell on Linux/macOS).
+Follow these instructions to compile and run the project on your local machine.
 
-## Configuration (`server_config.txt`)
+### Prerequisites
 
-The server reads its settings from a simple `key=value` file. Example values used in this project:
+* **Java Development Kit (JDK) 21** or newer is required to support virtual threads.
 
-```
-port=12345
-serverName=localhost
-bannedPhrases=java,SAD,JNI
-```
-These lines define the TCP port, the advertised server name/host, and a comma‑separated list of phrases that the server should block in messages.
+### Configuration
 
-> Put `server_config.txt` next to `Server.java` (as shown above). If your `Server` program expects a path to the config file as an argument, pass a relative path like `serverPart/server_config.txt`. Otherwise, it will typically try to load `server_config.txt` from its working directory.
+Before starting the server, you can configure its settings in the `serverPart/server_config.txt` file.
 
-## Build & run
+* `port`: The port number the server will listen on.
+* `serverName`: The name of the server (e.g., localhost).
+* `bannedPhrases`: A comma-separated list of words that are not allowed in usernames or messages.
 
-You can compile and run each part separately. Commands below assume you’re in the repository root: `Server-client-project/`.
+**Example `server_config.txt`:**
+port=12345 serverName=localhost bannedPhrases=java,SAD,JNI
+### Installation and Execution
 
-### Option A — Quick compile in-place
+You must start the server first, followed by one or more clients.
 
-**Compile:**
+**1. Prepare the Server Code**
 
-```bash
-# Server
-javac serverPart/Server.java
+> **Important:** Before compiling, you must modify one line in `Server.java` to correctly locate the configuration file.
 
-# Client
-javac clientPart/Client.java
-```
+* Open `Server.java`.
+* Find the `main` method at the bottom of the file.
+* Change this line:
+    ```java
+    Server server = new Server("ServerPart/src/server_config.txt");
+    ```
+* To this:
+    ```java
+    Server server = new Server("server_config.txt");
+    ```
 
-**Run:**
+**2. Run the Server**
 
-Open **two terminals**.
+* Open a terminal and navigate to the server's directory:
+    ```bash
+    cd Server-client-project/serverPart
+    ```
+* Compile the `Server.java` file:
+    ```bash
+    javac Server.java
+    ```
+* Run the server:
+    ```bash
+    java Server
+    ```
+    The server will now be running and listening for client connections on the configured port.
 
-Terminal 1 — start the server:
-```bash
-# If Server loads config implicitly from the working directory:
-cd serverPart
-java Server
+**3. Run the Client**
 
-# If Server expects a config path argument:
-# java Server server_config.txt
-```
+* Open a **new** terminal and navigate to the client's directory:
+    ```bash
+    cd Server-client-project/clientPart
+    ```
+* Compile the `Client.java` file:
+    ```bash
+    javac Client.java
+    ```
+* Run the client:
+    ```bash
+    java Client
+    ```
+* Repeat this step to launch additional client instances.
 
-Terminal 2 — start the client:
-```bash
-cd clientPart
-java Client
-```
+---
 
-### Option B — Compile to an `out/` directory
+## Usage Guide
 
-```bash
-mkdir -p out/server out/client
-
-javac -d out/server serverPart/Server.java
-javac -d out/client clientPart/Client.java
-
-# Run (from project root)
-java -cp out/server Server serverPart/server_config.txt   # if your Server expects a config path
-java -cp out/client Client
-```
-
-> If your classes declare a `package`, mirror that package in your folder structure and include it in the `java -cp` commands. If there’s **no** package declaration in the files, the commands above will work as is.
-
-## Typical workflow
-
-1. Adjust `serverPart/server_config.txt` (port, name/host, banned phrases).
-2. Start the server. Make sure it prints a “listening on port …” style message (or no errors).
-3. Start the client and connect to the server (many simple demos auto‑connect to `localhost:port`).
-4. Exchange messages. Any message containing a banned phrase should be rejected by the server.
-
-## Troubleshooting
-
-- **`Address already in use` / cannot bind port**
-  Another service uses the same port. Change `port` in `server_config.txt` and restart the server.
-
-- **Client can’t connect**
-  - Verify the `port` in the config matches what the client uses.
-  - If running on different machines, replace `serverName=localhost` with the server’s LAN IP or hostname and make sure firewalls allow the chosen port.
-
-- **Banned phrases don’t seem to work**
-  Ensure `bannedPhrases` is a comma‑separated list with no spaces (e.g., `a,b,c`). Restart the server after changes.
-
-## Tips
-
-- Keep the server and client in separate terminals so you can see logs from both.
-- When changing `server_config.txt`, restart the server so it reloads the file.
-- For multi‑machine tests, confirm you can ping the server host from the client machine first.
+1.  **Login**: When the client application starts, you will be prompted with a login window. Enter a unique **Username**, the **Server IP** (e.g., `localhost`), and the **Port** that the server is running on.
+2.  **Select Messaging Mode**:
+    * **Global**: Your message will be sent to every user in the chat. User checkboxes will be disabled.
+    * **Include**: Your message will only be sent to the users you select from the user list.
+    * **Exclude**: Your message will be sent to every user **except** those you select from the user list.
+3.  **Sending Messages**: Type your message in the input field at the bottom and press **Enter**.
+4.  **Additional Actions**:
+    * **Show Banned Words**: Click this button to view the list of words that are filtered by the server.
+    * **Disconnect**: Click this button to safely disconnect from the server and return to the login screen.

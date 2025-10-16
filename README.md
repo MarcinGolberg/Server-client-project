@@ -6,16 +6,16 @@ A multi-client chat application developed in Java, featuring a server that manag
 
 ## Features
 
-* [cite_start]**Multi-Client Architecture**: The server can handle numerous client connections simultaneously using a virtual thread per client. [cite: 1]
-* **GUI Client**: An intuitive and user-friendly chat interface built with Java Swing.
-* [cite_start]**Dynamic Server Configuration**: The server's port, name, and a list of banned phrases are loaded from an external `server_config.txt` file. [cite: 1]
-* **Advanced Messaging Modes**:
-    * **Global**: Send messages to all users in the chat room.
-    * [cite_start]**Include**: Send private messages to a selected group of users. [cite: 1]
-    * [cite_start]**Exclude**: Broadcast a message to all users except for a selected few. [cite: 1]
-* [cite_start]**Content Moderation**: The server filters usernames and messages, rejecting any that contain predefined banned phrases. [cite: 1]
-* [cite_start]**Real-Time User List**: Clients receive and display a continuously updated list of all connected users. [cite: 1]
-* [cite_start]**On-Demand Information**: Clients can request and view the server's usage instructions and the list of banned words at any time. [cite: 1]
+* **Multi-Client Architecture:** The server can handle numerous client connections simultaneously using a virtual thread per client.
+* **GUI Client:** An intuitive and user-friendly chat interface built with Java Swing.
+* **Dynamic Server Configuration:** The server's port, name, and a list of banned phrases are loaded from an external `server_config.txt` file.
+* **Advanced Messaging Modes:**
+    * **Global:** Send messages to all users in the chat room.
+    * **Include:** Send private messages to a selected group of users.
+    * **Exclude:** Broadcast a message to all users except for a selected few.
+* **Content Moderation:** The server filters usernames and messages, rejecting any that contain predefined banned phrases.
+* **Real-Time User List:** Clients receive and display a continuously updated list of all connected users.
+* **On-Demand Information:** Clients can request and view the server's usage instructions and the list of banned words at any time.
 
 ---
 

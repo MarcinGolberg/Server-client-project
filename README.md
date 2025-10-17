@@ -56,7 +56,7 @@ You must start the server first, followed by one or more clients.
 
 **1. Prepare the Server Code**
 
-> **Important:** Before compiling, you must modify one line in `Server.java` to correctly locate the configuration file.
+> **Important:** Before compiling, you must make sure that one line in `Server.java` can correctly locate the configuration file. To avoid this you can just place `Server.java` and `server_config.txt` in same direcory. If you don't do that and you want your configuration file to be stored somewhere else:
 
 * Open `Server.java`.
 * Find the `main` method at the bottom of the file.
@@ -66,7 +66,7 @@ You must start the server first, followed by one or more clients.
     ```
 * To this:
     ```java
-    Server server = new Server("server_config.txt");
+    Server server = new Server("your/path/to/config/file/server_config.txt");
     ```
 
 **2. Run the Server**
